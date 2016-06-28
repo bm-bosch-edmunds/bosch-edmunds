@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
@@ -29,7 +30,6 @@ import com.texocoyotl.ptedmundscars.api.CarsResult;
 import com.texocoyotl.ptedmundscars.api.Make;
 import com.texocoyotl.ptedmundscars.api.Model;
 import com.texocoyotl.ptedmundscars.data.Contract;
-import com.texocoyotl.ptedmundscars.utils.NoDefaultSpinner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,10 +52,14 @@ public class DashBoardActivity extends AppCompatActivity implements
     private static final String TAG = "DashBoardTAG_";
     private static final int MAKERS_LIST_LOADER = 0;
     private static final int MODELS_LIST_LOADER = 1;
+    private static final int STYLES_LIST_LOADER = 2;
+
     private static final String MAKER_NAME_KEY = "MAKER_NAME_KEY";
+    private static final String STYLES_MAKER_PARAM = "STYLES_MAKER_PARAM";
+    private static final String STYLES_MODEL_PARAM = "STYLES_MODEL_PARAM";
 
     private Subscription mCarsListSubscription;
-    private CarsRecyclerViewAdapter mModelsListAdapter;
+    private CarsRecyclerViewAdapter mStylesListAdapter;
     private RecyclerView mRecyclerView;
     private SimpleCursorAdapter mMakersSpinnerAdapter;
     private SimpleCursorAdapter mModelsSpinnerAdapter;
@@ -65,13 +69,24 @@ public class DashBoardActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
+
+        initWidgets();
+
+        //Uri bgUri = Contract.CarsEntry.CONTENT_URI;
+        //getContentResolver().delete(bgUri, null, null);
+
+        getSupportLoaderManager().initLoader(MAKERS_LIST_LOADER, null, this);
+
+    }
+
+    private void initWidgets() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.models_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mModelsListAdapter = new CarsRecyclerViewAdapter(this, null);
-        mRecyclerView.setAdapter(mModelsListAdapter);
+        mStylesListAdapter = new CarsRecyclerViewAdapter(this, null);
+        mRecyclerView.setAdapter(mStylesListAdapter);
 
         String[] from = new String[] {"name"};
         int[] to = new int[] {android.R.id.text1};
@@ -116,12 +131,6 @@ public class DashBoardActivity extends AppCompatActivity implements
 
             }
         });
-
-        //Uri bgUri = Contract.CarsEntry.CONTENT_URI;
-        //getContentResolver().delete(bgUri, null, null);
-
-        getSupportLoaderManager().initLoader(MAKERS_LIST_LOADER, null, this);
-
     }
 
     @Override
@@ -148,6 +157,10 @@ public class DashBoardActivity extends AppCompatActivity implements
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onListFragmentInteraction(String name, String make) {
+
+    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -171,6 +184,18 @@ public class DashBoardActivity extends AppCompatActivity implements
                         new String[]{args.getString(MAKER_NAME_KEY)},
                         null
                 );
+            case STYLES_LIST_LOADER:
+                return new CursorLoader(
+                        this,
+                        Contract.StylesEntry.CONTENT_URI,
+                        Contract.StylesEntry.DashBoardQuery.COLUMNS,
+                        Contract.StylesEntry.DashBoardQuery.SELECTION,
+                        new String[]{
+                                args.getString(STYLES_MAKER_PARAM),
+                                args.getString(STYLES_MODEL_PARAM)
+                        },
+                        null
+                );
             default:
                 return null;
         }
@@ -188,12 +213,20 @@ public class DashBoardActivity extends AppCompatActivity implements
                 mModelsSpinnerAdapter.swapCursor(data);
                 mModelsSpinner.setSelection(0);
             }
+            else if (loader.getId() == STYLES_LIST_LOADER){
+                mStylesListAdapter.swapCursor(data);
+            }
 
         } else {
-            downloadCarListData();
+            if (loader.getId() == MAKERS_LIST_LOADER || loader.getId() == MODELS_LIST_LOADER)
+                downloadCarListData();
+            else if (loader.getId() == STYLES_LIST_LOADER)
+                downloadStylesListData();
         }
 
     }
+
+
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
@@ -248,7 +281,10 @@ public class DashBoardActivity extends AppCompatActivity implements
                             for(Model model: make.getModels()){
                                 ContentValues data = new ContentValues();
                                 data.put(Contract.CarsEntry.COLUMN_NAME, model.getName());
+                                data.put(Contract.CarsEntry.COLUMN_WEB_NAME, model.getNiceName());
+                                data.put(Contract.CarsEntry.COLUMN_MODEL_ID, model.getId());
                                 data.put(Contract.CarsEntry.COLUMN_MANUFACTURER, make.getName());
+                                data.put(Contract.CarsEntry.COLUMN_WEB_MANUFACTURER, model.getNiceName());
                                 data.put(Contract.CarsEntry.COLUMN_YEAR, model.getYears().get(0).getYear());
                                 values.add(data);
                             }
@@ -288,8 +324,21 @@ public class DashBoardActivity extends AppCompatActivity implements
 
     }
 
-    @Override
-    public void onListFragmentInteraction(String name, String make) {
+    private void downloadStylesListData() {
 
+    }
+
+
+
+    public void updateStylesList(View view){
+
+        String maker = mMakersSpinnerAdapter.getCursor().getString(Contract.CarsEntry.MAKERS_QUERY_WEB_MANUFACTURERS_COLNUM);
+        String model = mModelsSpinnerAdapter.getCursor().getString(Contract.ModelsListQuery.COLNUM_WEB_NAME);
+
+        Bundle params = new Bundle();
+        params.putString(STYLES_MAKER_PARAM, maker.toLowerCase());
+        params.putString(STYLES_MODEL_PARAM, model.toLowerCase());
+
+        getSupportLoaderManager().restartLoader(STYLES_LIST_LOADER, params, DashBoardActivity.this);
     }
 }

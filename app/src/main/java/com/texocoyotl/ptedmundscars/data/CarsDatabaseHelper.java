@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class CarsDatabaseHelper  extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "edmunds.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 4;
 
     public CarsDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -15,11 +15,13 @@ public class CarsDatabaseHelper  extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(Contract.CarsEntry.CREATE_TABLE);
+        db.execSQL(Contract.StylesEntry.CREATE_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + Contract.CarsEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + Contract.StylesEntry.TABLE_NAME);
         onCreate(db);
     }
 }
