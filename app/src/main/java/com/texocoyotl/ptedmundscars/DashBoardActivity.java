@@ -29,6 +29,7 @@ import com.texocoyotl.ptedmundscars.api.CarsResult;
 import com.texocoyotl.ptedmundscars.api.Make;
 import com.texocoyotl.ptedmundscars.api.Model;
 import com.texocoyotl.ptedmundscars.data.Contract;
+import com.texocoyotl.ptedmundscars.utils.NoDefaultSpinner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +59,7 @@ public class DashBoardActivity extends AppCompatActivity implements
     private RecyclerView mRecyclerView;
     private SimpleCursorAdapter mMakersSpinnerAdapter;
     private SimpleCursorAdapter mModelsSpinnerAdapter;
+    private Spinner mModelsSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,16 +78,16 @@ public class DashBoardActivity extends AppCompatActivity implements
         mMakersSpinnerAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, null, from, to);
         mMakersSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        Spinner spin = (Spinner) this.findViewById(R.id.dashboard_makers);
-        spin.setAdapter(mMakersSpinnerAdapter);
-        spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        Spinner mMakersSpinner = (Spinner) this.findViewById(R.id.dashboard_makers);
+        mMakersSpinner.setAdapter(mMakersSpinnerAdapter);
+        mMakersSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String  maker = ((TextView) view).getText().toString();
 
                 Bundle params = new Bundle();
                 params.putString(MAKER_NAME_KEY, maker);
-                getSupportLoaderManager().initLoader(MODELS_LIST_LOADER, params, DashBoardActivity.this);
+                getSupportLoaderManager().restartLoader(MODELS_LIST_LOADER, params, DashBoardActivity.this);
 
             }
 
@@ -100,9 +102,9 @@ public class DashBoardActivity extends AppCompatActivity implements
         mModelsSpinnerAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, null, from, to);
         mModelsSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        spin = (Spinner) this.findViewById(R.id.dashboard_models);
-        spin.setAdapter(mModelsSpinnerAdapter);
-        spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mModelsSpinner = (Spinner) this.findViewById(R.id.dashboard_models);
+        mModelsSpinner.setAdapter(mModelsSpinnerAdapter);
+        mModelsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
@@ -165,7 +167,7 @@ public class DashBoardActivity extends AppCompatActivity implements
                         this,
                         Contract.CarsEntry.CONTENT_URI,
                         Contract.ModelsListQuery.COLUMNS,
-                        Contract.CarsEntry.COLUMN_MANUFACTURER,
+                        Contract.CarsEntry.COLUMN_MANUFACTURER + "= ?",
                         new String[]{args.getString(MAKER_NAME_KEY)},
                         null
                 );
@@ -182,8 +184,10 @@ public class DashBoardActivity extends AppCompatActivity implements
 
             if (loader.getId() == MAKERS_LIST_LOADER)
                 mMakersSpinnerAdapter.swapCursor(data);
-            else if (loader.getId() == MODELS_LIST_LOADER)
+            else if (loader.getId() == MODELS_LIST_LOADER) {
                 mModelsSpinnerAdapter.swapCursor(data);
+                mModelsSpinner.setSelection(0);
+            }
 
         } else {
             downloadCarListData();

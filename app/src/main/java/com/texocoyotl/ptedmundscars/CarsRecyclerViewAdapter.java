@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.texocoyotl.ptedmundscars.data.Contract;
+import com.texocoyotl.ptedmundscars.utils.CursorRecyclerViewAdapter;
 
 
 public class CarsRecyclerViewAdapter extends CursorRecyclerViewAdapter<CarsRecyclerViewAdapter.ViewHolder> {
