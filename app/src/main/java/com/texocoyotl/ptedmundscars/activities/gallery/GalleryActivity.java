@@ -1,17 +1,26 @@
 package com.texocoyotl.ptedmundscars.activities.gallery;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.GridLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.texocoyotl.ptedmundscars.BuildConfig;
 import com.texocoyotl.ptedmundscars.R;
 import com.texocoyotl.ptedmundscars.activities.dashboard.DashBoardActivity;
@@ -42,6 +51,8 @@ public class GalleryActivity extends AppCompatActivity {
     private static final String TAG = "GalleryTAG_";
     private String mStyleId;
     private Subscription mGallerySubscription;
+    private ImageView[] imgs;
+    private GridLayout grid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +62,27 @@ public class GalleryActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        grid = (GridLayout) findViewById(R.id.gallery_grid);
+
+
         mStyleId = getIntent().getStringExtra(DetailActivity.STYLE_ID_KEY);
         if (mStyleId != null) {
             downloadGallery();
         }
+    }
+
+
+    @Override
+    public void onDestroy() {
+        if (mGallerySubscription != null)
+            mGallerySubscription.unsubscribe();
+        super.onDestroy();
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    @Override
+    public Intent getParentActivityIntent() {
+        return super.getParentActivityIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     }
 
 
@@ -102,13 +130,32 @@ public class GalleryActivity extends AppCompatActivity {
                     public void onNext(List<Gallery> galleries) {
                         if (galleries != null){
 
-                            for (int i = 0; i < galleries.size() && i < 4; i++) {
+                            for (int i = 0; i < galleries.size(); i++) {
                                 Gallery gallery = galleries.get(i);
                                 List<String> photos = gallery.getPhotoSrcs();
                                 Collections.sort(photos);
-                                String url = photos.size() > 6 ? photos.get(6) : "";
+                                String url = photos.size() > 5 ? photos.get(5) : "";
 
+                                Log.d(TAG, "onNext: Loading url " + url);
 
+                                GalleryActivity self = GalleryActivity.this;
+                                DisplayMetrics metrics = new DisplayMetrics();
+                                getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+                                int width = metrics.widthPixels;
+                                int height = metrics.heightPixels;
+
+                                ImageView img= new ImageView(self);
+//                                GridLayout.LayoutParams params = new GridLayout.LayoutParams(width, height/2);
+//                                img.setLayoutParams(params);
+
+                                grid.addView(img);
+
+                                Picasso.with(self)
+                                        .load(BuildConfig.BASE_IMAGES_URL + url)
+                                        .resize(grid.getWidth() / 2, (int) (grid.getWidth() * 0.75 / 2))
+                                        .centerCrop()
+                                        .into(img);
 
                             }
 
