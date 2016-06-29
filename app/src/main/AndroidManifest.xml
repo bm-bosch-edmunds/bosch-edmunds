@@ -23,7 +23,7 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:label="@string/title_activity_login"></activity>
+            android:label="@string/title_activity_login" />
 
         <provider
             android:name=".data.CarsContentProvider"
@@ -39,6 +39,15 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.texocoyotl.ptedmundscars.activities.dashboard.DashBoardActivity" />
+        </activity>
+        <activity
+            android:name=".activities.gallery.GalleryActivity"
+            android:label="@string/title_activity_gallery"
+            android:parentActivityName=".activities.detail.DetailActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.texocoyotl.ptedmundscars.activities.detail.DetailActivity" />
         </activity>
     </application>
 

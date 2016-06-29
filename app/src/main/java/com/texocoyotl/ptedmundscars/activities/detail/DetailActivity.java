@@ -1,6 +1,7 @@
 package com.texocoyotl.ptedmundscars.activities.detail;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import com.texocoyotl.ptedmundscars.BuildConfig;
 import com.texocoyotl.ptedmundscars.R;
 import com.texocoyotl.ptedmundscars.activities.dashboard.DashBoardActivity;
+import com.texocoyotl.ptedmundscars.activities.gallery.GalleryActivity;
 import com.texocoyotl.ptedmundscars.api.APIService;
 import com.texocoyotl.ptedmundscars.api.Categories;
 import com.texocoyotl.ptedmundscars.api.Engine;
@@ -36,6 +38,8 @@ import rx.schedulers.Schedulers;
 public class DetailActivity extends AppCompatActivity {
 
     private static final String TAG = "DetailTAG_";
+    public static final String STYLE_ID_KEY = "STYLE_ID_KEY";
+
     private Subscription mStyleDetailSubscription;
     private FloatingActionButton fab;
     private String mStyleId;
@@ -50,15 +54,22 @@ public class DetailActivity extends AppCompatActivity {
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
 
-        mStyleId = getIntent().getStringExtra(DashBoardActivity.STYLE_ID_PARAM);
+        if(savedInstanceState == null || !savedInstanceState.containsKey(STYLE_ID_KEY))
+            mStyleId = getIntent().getStringExtra(DashBoardActivity.STYLE_ID_PARAM);
+        else
+            mStyleId = savedInstanceState.getString(STYLE_ID_KEY);
+
+
         if (mStyleId != null) {
-            downloadDetail(mStyleId);
+            downloadDetail();
 
             if (fab != null)
                 fab.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(DetailActivity.this, mStyleId, Toast.LENGTH_SHORT).show();
+                        Intent i = new Intent(DetailActivity.this, GalleryActivity.class);
+                        i.putExtra(STYLE_ID_KEY, mStyleId);
+                        startActivity(i);
                     }
                 });
         }
@@ -71,7 +82,13 @@ public class DetailActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    private void downloadDetail(final String styleId) {
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putString(STYLE_ID_KEY, mStyleId);
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    private void downloadDetail() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 
@@ -80,7 +97,7 @@ public class DetailActivity extends AppCompatActivity {
                     .setAction(getString(R.string.snackbar_action_retry), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            downloadDetail(styleId);
+                            downloadDetail();
                         }
                     })
                     .show();
@@ -95,7 +112,7 @@ public class DetailActivity extends AppCompatActivity {
 
         APIService apiService = retrofit.create(APIService.class);
 
-        Observable<Style> mStyleDetailAPIcall = apiService.getStyleDetail(styleId);
+        Observable<Style> mStyleDetailAPIcall = apiService.getStyleDetail(mStyleId);
 
         mStyleDetailSubscription = mStyleDetailAPIcall
                 .subscribeOn(Schedulers.newThread())
