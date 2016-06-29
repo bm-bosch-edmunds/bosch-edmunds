@@ -20,9 +20,7 @@
             android:id="@+id/gallery_grid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:columnCount="2">
-
-
+            android:columnCount="@integer/gallery_columns">
 
         </GridLayout>
     </ScrollView>

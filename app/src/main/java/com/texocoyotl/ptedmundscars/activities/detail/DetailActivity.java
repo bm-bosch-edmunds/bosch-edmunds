@@ -180,15 +180,15 @@ public class DetailActivity extends AppCompatActivity {
                             if (engine != null){
                                 engineName.setText(engine.getName());
                                 engineType.setText(engine.getType());
-                                cylinders.setText(engine.getCylinder());
+                                cylinders.setText(engine.getCylinder().toString());
                                 engineSize.setText(engine.getSize().toString());
-                                horsePower.setText(engine.getHorsepower());
+                                horsePower.setText(engine.getHorsepower().toString());
                             }
 
                             MPG mpg = style.getMPG();
                             if (mpg != null){
-                                mpgHighway.setText(mpg.getHighway());
-                                mpgCity.setText(mpg.getCity());
+                                mpgHighway.setText(mpg.getHighway().toString());
+                                mpgCity.setText(mpg.getCity().toString());
                             }
 
 

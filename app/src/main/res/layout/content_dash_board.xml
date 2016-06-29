@@ -13,56 +13,81 @@
     tools:context=".activities.dashboard.DashBoardActivity"
     tools:showIn="@layout/activity_dash_board">
 
-
-    <Spinner
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/dashboard_makers"
-        android:layout_gravity="center_horizontal"
-        />
-
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/dashboard_models"
-        android:layout_gravity="center_horizontal"
-        />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="Search"
-        android:onClick="updateStylesList"
-        />
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <RelativeLayout
-            android:id="@+id/loadingPanel"
+        android:padding="16dp">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-            <ProgressBar
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/dashboard_makers"
+                    android:layout_gravity="center_horizontal"
+                    android:padding="8dp" />
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/dashboard_models"
+                    android:layout_gravity="center_horizontal"
+                    android:padding="8dp" />
+
+            </LinearLayout>
+
+            <ImageButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:indeterminate="true" />
-        </RelativeLayout>
+                android:layout_gravity="center"
+                android:background="@drawable/ic_search_black_36dp"
+                android:padding="16dp"
+                android:layout_margin="16dp"
+                android:onClick="updateStylesList"
+                />
 
-        <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:id="@+id/models_list"
-            android:name="com.texocoyotl.ptedmundscars.CarItemFragment"
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp">
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            app:layoutManager="LinearLayoutManager"
-            tools:listitem="@layout/cars_list_row" />
-        </FrameLayout>
+            android:layout_height="match_parent">
 
+            <RelativeLayout
+                android:id="@+id/loadingPanel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="true" />
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/models_list"
+                android:name="com.texocoyotl.ptedmundscars.CarItemFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                app:layoutManager="LinearLayoutManager"
+                tools:listitem="@layout/cars_list_row" />
+        </FrameLayout>
+    </android.support.v7.widget.CardView>
 </LinearLayout>
