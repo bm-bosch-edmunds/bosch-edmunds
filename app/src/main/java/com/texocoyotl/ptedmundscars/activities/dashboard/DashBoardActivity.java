@@ -3,10 +3,13 @@ package com.texocoyotl.ptedmundscars.activities.dashboard;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -24,10 +27,9 @@ import android.widget.AdapterView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.texocoyotl.ptedmundscars.BuildConfig;
-import com.texocoyotl.ptedmundscars.LoginActivity;
+import com.texocoyotl.ptedmundscars.activities.login.LoginActivity;
 import com.texocoyotl.ptedmundscars.R;
 import com.texocoyotl.ptedmundscars.activities.detail.DetailActivity;
 import com.texocoyotl.ptedmundscars.api.APIService;
@@ -66,6 +68,9 @@ public class DashBoardActivity extends AppCompatActivity implements
     private static final String STYLES_MODEL_PARAM = "STYLES_MODEL_PARAM";
     public static final String STYLE_ID_PARAM = "STYLE_ID_PARAM";
 
+    private static final String lastDownloadKey = "LAST_DOWNLOAD";
+    private static final long DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
+
     private Subscription mCarsListSubscription;
     private CarsRecyclerViewAdapter mStylesListAdapter;
     private RecyclerView mRecyclerView;
@@ -82,8 +87,18 @@ public class DashBoardActivity extends AppCompatActivity implements
 
         initWidgets();
 
-        //Uri bgUri = Contract.CarsEntry.CONTENT_URI;
-        //getContentResolver().delete(bgUri, null, null);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        long lastSync = prefs.getLong(lastDownloadKey, 0);
+        long timestamp = System.currentTimeMillis();
+        if (timestamp - lastSync >= DAY_IN_MILLIS) {
+
+            getContentResolver().delete(Contract.CarsEntry.CONTENT_URI, null, null);
+            getContentResolver().delete(Contract.StylesEntry.CONTENT_URI, null, null);
+
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putLong(lastDownloadKey, timestamp);
+            editor.apply();
+        }
 
         getSupportLoaderManager().initLoader(MAKERS_LIST_LOADER, null, this);
 
