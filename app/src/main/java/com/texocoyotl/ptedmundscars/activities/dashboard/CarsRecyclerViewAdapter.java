@@ -46,7 +46,7 @@ public class CarsRecyclerViewAdapter extends CursorRecyclerViewAdapter<CarsRecyc
         viewHolder.mNameView.setText(name);
         viewHolder.mYear.setText(year);
 
-        viewHolder.mDetailsButton.setOnClickListener(new View.OnClickListener() {
+        viewHolder.mRow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mListener) {
