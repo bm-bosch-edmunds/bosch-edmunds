@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:background="@drawable/ic_directions_run_black_24dp"
+        android:background="@drawable/ic_keyboard_arrow_right_black_24dp"
         />
 
 </LinearLayout>

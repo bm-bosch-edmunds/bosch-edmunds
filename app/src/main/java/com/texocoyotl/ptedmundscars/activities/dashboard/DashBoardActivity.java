@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -72,6 +73,7 @@ public class DashBoardActivity extends AppCompatActivity implements
     private SimpleCursorAdapter mModelsSpinnerAdapter;
     private Spinner mModelsSpinner;
     private Subscription mStylesListSubscription;
+    RelativeLayout mLoadingPanel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +92,8 @@ public class DashBoardActivity extends AppCompatActivity implements
     private void initWidgets() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        mLoadingPanel = (RelativeLayout) findViewById(R.id.loadingPanel);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.models_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -213,6 +217,7 @@ public class DashBoardActivity extends AppCompatActivity implements
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
         if (data.moveToFirst()) {
+            mLoadingPanel.setVisibility(View.GONE);
             Log.d(TAG, "logRows: " + data.getCount());
 
             if (loader.getId() == MAKERS_LIST_LOADER)
@@ -331,10 +336,14 @@ public class DashBoardActivity extends AppCompatActivity implements
     }
 
     private void downloadStylesListData() {
+
+        mLoadingPanel.setVisibility(View.VISIBLE);
+
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 
         if (activeNetwork == null) {
+            mLoadingPanel.setVisibility(View.GONE);
             Snackbar.make(null, getString(R.string.snackbar_no_internet_initial), Snackbar.LENGTH_INDEFINITE)
                     .setAction(getString(R.string.snackbar_action_retry), new View.OnClickListener() {
                         @Override
@@ -411,11 +420,14 @@ public class DashBoardActivity extends AppCompatActivity implements
 
                     @Override
                     public void onError(Throwable e) {
+                        mLoadingPanel.setVisibility(View.GONE);
                         Log.d(TAG, "onError: " + e.getMessage());
                     }
 
                     @Override
                     public void onNext(Integer result) {
+                        mLoadingPanel.setVisibility(View.GONE);
+
                         if (result > 0) {
                             Bundle params = new Bundle();
                             params.putString(STYLES_MAKER_PARAM, maker);
