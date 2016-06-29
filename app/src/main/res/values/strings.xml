@@ -20,4 +20,9 @@
     <string name="snackbar_action_retry">Retry</string>
     <string name="title_activity_detail"></string>
     <string name="title_activity_gallery">GalleryActivity</string>
+
+    <string name="logo_substitution_FIAT">Fiat</string>
+    <string name="logo_substitution_MINI">Mini</string>
+    <string name="logo_substitution_Lincoln">Lincoln-Motor</string>
+
 </resources>

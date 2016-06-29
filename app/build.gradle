@@ -14,6 +14,7 @@ android {
         buildConfigField "String", "BASE_API_URL", '"https://api.edmunds.com/api/vehicle/v2/"'
         buildConfigField "String", "BASE_IMAGES_API_URL", '"https://api.edmunds.com/v1/api/vehiclephoto/service/"'
         buildConfigField "String", "BASE_IMAGES_URL", '"http://media.ed.edmunds-media.com"'
+        buildConfigField "String", "BASE_LOGOS_URL", '"http://www.carlogos.org/uploads/car-logos/"'
         buildConfigField "String", "API_KEY", '"5eyw33g6h9rafn2x2gge5hmg"'
     }
     buildTypes {

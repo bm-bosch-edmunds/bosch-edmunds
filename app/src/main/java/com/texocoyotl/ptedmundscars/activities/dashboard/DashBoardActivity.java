@@ -24,10 +24,12 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.texocoyotl.ptedmundscars.BuildConfig;
 import com.texocoyotl.ptedmundscars.activities.login.LoginActivity;
 import com.texocoyotl.ptedmundscars.R;
@@ -73,7 +75,6 @@ public class DashBoardActivity extends AppCompatActivity implements
 
     private Subscription mCarsListSubscription;
     private CarsRecyclerViewAdapter mStylesListAdapter;
-    private RecyclerView mRecyclerView;
     private SimpleCursorAdapter mMakersSpinnerAdapter;
     private SimpleCursorAdapter mModelsSpinnerAdapter;
     private Spinner mModelsSpinner;
@@ -90,7 +91,7 @@ public class DashBoardActivity extends AppCompatActivity implements
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         long lastSync = prefs.getLong(lastDownloadKey, 0);
         long timestamp = System.currentTimeMillis();
-        if (timestamp - lastSync >= DAY_IN_MILLIS) {
+        if (timestamp - lastSync >= 0) {
 
             getContentResolver().delete(Contract.CarsEntry.CONTENT_URI, null, null);
             getContentResolver().delete(Contract.StylesEntry.CONTENT_URI, null, null);
@@ -110,22 +111,43 @@ public class DashBoardActivity extends AppCompatActivity implements
 
         mLoadingPanel = (RelativeLayout) findViewById(R.id.loadingPanel);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.models_list);
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.models_list);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mStylesListAdapter = new CarsRecyclerViewAdapter(this, null);
         mRecyclerView.setAdapter(mStylesListAdapter);
 
-        String[] from = new String[] {"name"};
-        int[] to = new int[] {android.R.id.text1};
-        mMakersSpinnerAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_spinner_item, null, from, to);
-        mMakersSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        String[] from = new String[] {"name", "name"};
+        int[] to = new int[] {R.id.makers_spinner_image, R.id.makers_spinner_name};
+        mMakersSpinnerAdapter = new SimpleCursorAdapter(this, R.layout.makers_spinner_row, null, from, to, 1);
+        mMakersSpinnerAdapter.setDropDownViewResource(R.layout.makers_spinner_row);
+        mMakersSpinnerAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder(){
+            /** Binds the Cursor column defined by the specified index to the specified view */
+            public boolean setViewValue(View view, Cursor cursor, int columnIndex){
+                if(view.getId() == R.id.makers_spinner_image){
+                    ImageView img =((ImageView)view);
+                    String logo = cursor.getString(columnIndex);
+                    int subs = getResources().getIdentifier("logo_substitution_" + logo, "string", getPackageName());
+                    if (subs > 0)
+                        logo = getString(subs);
+                    else
+                        logo = logo.replace(" ", "-");
+
+                    Picasso.with(DashBoardActivity.this)
+                            .load(BuildConfig.BASE_LOGOS_URL + logo + "-logo-1.jpg")
+                            .into(img);
+                    return true; //true because the data was bound to the view
+                }
+
+                return false;
+            }
+        });
 
         Spinner mMakersSpinner = (Spinner) this.findViewById(R.id.dashboard_makers);
         mMakersSpinner.setAdapter(mMakersSpinnerAdapter);
         mMakersSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String  maker = ((TextView) view).getText().toString();
+                String  maker = ((TextView) view.findViewById(R.id.makers_spinner_name)).getText().toString();
 
                 Bundle params = new Bundle();
                 params.putString(MAKER_NAME_KEY, maker);
@@ -167,12 +189,8 @@ public class DashBoardActivity extends AppCompatActivity implements
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_logout) {
             Intent i = new Intent(this, LoginActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
@@ -308,10 +326,12 @@ public class DashBoardActivity extends AppCompatActivity implements
 
                             for(Model model: make.getModels()){
                                 ContentValues data = new ContentValues();
-                                data.put(Contract.CarsEntry.COLUMN_NAME, model.getName());
+                                String capName = Character.toUpperCase(model.getName().charAt(0)) + model.getName().substring(1);
+                                data.put(Contract.CarsEntry.COLUMN_NAME, capName);
                                 data.put(Contract.CarsEntry.COLUMN_WEB_NAME, model.getNiceName());
                                 data.put(Contract.CarsEntry.COLUMN_MODEL_ID, model.getId());
-                                data.put(Contract.CarsEntry.COLUMN_MANUFACTURER, make.getName());
+                                capName = Character.toUpperCase(make.getName().charAt(0)) + make.getName().substring(1);
+                                data.put(Contract.CarsEntry.COLUMN_MANUFACTURER, capName);
                                 data.put(Contract.CarsEntry.COLUMN_WEB_MANUFACTURER, make.getNiceName());
                                 data.put(Contract.CarsEntry.COLUMN_YEAR, model.getYears().get(0).getYear());
                                 values.add(data);
