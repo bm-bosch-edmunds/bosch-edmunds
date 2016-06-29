@@ -31,6 +31,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.texocoyotl.ptedmundscars.activities.dashboard.DashBoardActivity;
+
 import java.util.ArrayList;
 import java.util.List;
 

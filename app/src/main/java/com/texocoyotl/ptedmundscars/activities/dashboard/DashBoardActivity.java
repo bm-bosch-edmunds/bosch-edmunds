@@ -1,4 +1,4 @@
-package com.texocoyotl.ptedmundscars;
+package com.texocoyotl.ptedmundscars.activities.dashboard;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
@@ -24,11 +23,17 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.texocoyotl.ptedmundscars.BuildConfig;
+import com.texocoyotl.ptedmundscars.LoginActivity;
+import com.texocoyotl.ptedmundscars.R;
 import com.texocoyotl.ptedmundscars.api.APIService;
 import com.texocoyotl.ptedmundscars.api.CarsResult;
 import com.texocoyotl.ptedmundscars.api.Make;
 import com.texocoyotl.ptedmundscars.api.Model;
+import com.texocoyotl.ptedmundscars.api.Style;
+import com.texocoyotl.ptedmundscars.api.Year;
 import com.texocoyotl.ptedmundscars.data.Contract;
 
 import java.util.ArrayList;
@@ -47,7 +52,7 @@ import rx.schedulers.Schedulers;
 
 public class DashBoardActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor>,
-        OnListFragmentInteractionListener {
+        OnStylesListInteractionListener {
 
     private static final String TAG = "DashBoardTAG_";
     private static final int MAKERS_LIST_LOADER = 0;
@@ -64,6 +69,7 @@ public class DashBoardActivity extends AppCompatActivity implements
     private SimpleCursorAdapter mMakersSpinnerAdapter;
     private SimpleCursorAdapter mModelsSpinnerAdapter;
     private Spinner mModelsSpinner;
+    private Subscription mStylesListSubscription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,18 +125,7 @@ public class DashBoardActivity extends AppCompatActivity implements
 
         mModelsSpinner = (Spinner) this.findViewById(R.id.dashboard_models);
         mModelsSpinner.setAdapter(mModelsSpinnerAdapter);
-        mModelsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
     }
 
     @Override
@@ -158,8 +153,8 @@ public class DashBoardActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onListFragmentInteraction(String name, String make) {
-
+    public void onListFragmentInteraction(String styleId) {
+        Toast.makeText(DashBoardActivity.this, styleId, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -251,7 +246,7 @@ public class DashBoardActivity extends AppCompatActivity implements
         }
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.edmunds.com/api/vehicle/v2/")
+                .baseUrl(BuildConfig.BASE_API_URL)
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io()))
                 .addConverterFactory(JacksonConverterFactory.create())
                 .build();
@@ -284,13 +279,11 @@ public class DashBoardActivity extends AppCompatActivity implements
                                 data.put(Contract.CarsEntry.COLUMN_WEB_NAME, model.getNiceName());
                                 data.put(Contract.CarsEntry.COLUMN_MODEL_ID, model.getId());
                                 data.put(Contract.CarsEntry.COLUMN_MANUFACTURER, make.getName());
-                                data.put(Contract.CarsEntry.COLUMN_WEB_MANUFACTURER, model.getNiceName());
+                                data.put(Contract.CarsEntry.COLUMN_WEB_MANUFACTURER, make.getNiceName());
                                 data.put(Contract.CarsEntry.COLUMN_YEAR, model.getYears().get(0).getYear());
                                 values.add(data);
                             }
                         }
-
-                        if (BuildConfig.DEBUG) Log.d(TAG, "call: " + values.size());
 
                         if (values.size() > 0) {
                             ContentValues[] cvArray = new ContentValues[values.size()];
@@ -298,7 +291,7 @@ public class DashBoardActivity extends AppCompatActivity implements
                             getContentResolver().bulkInsert(Contract.CarsEntry.CONTENT_URI, cvArray);
                         }
 
-                        Log.d(TAG, "Rows inserted " + values.size() + " " + Thread.currentThread());
+                        if (BuildConfig.DEBUG) Log.d(TAG, "Rows inserted " + values.size() + " " + Thread.currentThread());
 
                         return values.size();
                     }
@@ -325,6 +318,99 @@ public class DashBoardActivity extends AppCompatActivity implements
     }
 
     private void downloadStylesListData() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+        if (activeNetwork == null) {
+            Snackbar.make(null, getString(R.string.snackbar_no_internet_initial), Snackbar.LENGTH_INDEFINITE)
+                    .setAction(getString(R.string.snackbar_action_retry), new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            downloadCarListData();
+                        }
+                    })
+                    .show();
+            return;
+        }
+
+        final String maker = mMakersSpinnerAdapter.getCursor().getString(Contract.CarsEntry.MAKERS_QUERY_WEB_MANUFACTURERS_COLNUM);
+        final String model = mModelsSpinnerAdapter.getCursor().getString(Contract.ModelsListQuery.COLNUM_WEB_NAME);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BuildConfig.BASE_API_URL)
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io()))
+                .addConverterFactory(JacksonConverterFactory.create())
+                .build();
+
+        APIService apiService = retrofit.create(APIService.class);
+
+        Observable<Model> mStylesListAPIcall = apiService.getStylesList(maker, model);
+
+        mStylesListSubscription = mStylesListAPIcall
+                .subscribeOn(Schedulers.newThread())
+                .doOnError(new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Log.d(TAG, "onError: " + throwable.getMessage());
+                    }
+                })
+                .map(new Func1<Model, Integer>() {
+                    @Override
+                    public Integer call(Model result) {
+
+                        List<ContentValues> values = new ArrayList<ContentValues>();
+                        List<Year> years = result.getYears();
+
+                        for (int i = 0; i < years.size(); i++) {
+                            Year year = years.get(i);
+
+                            for(Style style: year.getStyles()){
+                                ContentValues data = new ContentValues();
+                                data.put(Contract.StylesEntry.COLUMN_STYLE_ID, style.getId());
+                                data.put(Contract.StylesEntry.COLUMN_MAKER, maker);
+                                data.put(Contract.StylesEntry.COLUMN_MODEL, model);
+                                data.put(Contract.StylesEntry.COLUMN_YEAR, year.getYear());
+                                data.put(Contract.StylesEntry.COLUMN_NAME, style.getName());
+                                data.put(Contract.StylesEntry.COLUMN_TYPE, style.getTrim());
+                                data.put(Contract.StylesEntry.COLUMN_SUBMODEL, style.getSubmodel().getNiceName());
+
+                                values.add(data);
+                            }
+                        }
+
+                        if (values.size() > 0) {
+                            ContentValues[] cvArray = new ContentValues[values.size()];
+                            values.toArray(cvArray);
+                            getContentResolver().bulkInsert(Contract.StylesEntry.CONTENT_URI, cvArray);
+                        }
+
+                        Log.d(TAG, "Rows inserted " + values.size() + " " + Thread.currentThread());
+
+                        return values.size();
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Integer>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d(TAG, "onError: " + e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(Integer result) {
+                        if (result > 0) {
+                            Bundle params = new Bundle();
+                            params.putString(STYLES_MAKER_PARAM, maker);
+                            params.putString(STYLES_MODEL_PARAM, model);
+                            getSupportLoaderManager().restartLoader(STYLES_LIST_LOADER, params, DashBoardActivity.this);
+                        }
+                    }
+                });
 
     }
 
@@ -336,8 +422,8 @@ public class DashBoardActivity extends AppCompatActivity implements
         String model = mModelsSpinnerAdapter.getCursor().getString(Contract.ModelsListQuery.COLNUM_WEB_NAME);
 
         Bundle params = new Bundle();
-        params.putString(STYLES_MAKER_PARAM, maker.toLowerCase());
-        params.putString(STYLES_MODEL_PARAM, model.toLowerCase());
+        params.putString(STYLES_MAKER_PARAM, maker);
+        params.putString(STYLES_MODEL_PARAM, model);
 
         getSupportLoaderManager().restartLoader(STYLES_LIST_LOADER, params, DashBoardActivity.this);
     }

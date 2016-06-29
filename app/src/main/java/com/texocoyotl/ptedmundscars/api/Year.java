@@ -1,6 +1,8 @@
 package com.texocoyotl.ptedmundscars.api;
 
+        import java.util.ArrayList;
         import java.util.HashMap;
+        import java.util.List;
         import java.util.Map;
 
         import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -14,7 +16,8 @@ package com.texocoyotl.ptedmundscars.api;
 
 @JsonPropertyOrder({
         "id",
-        "year"
+        "year",
+        "styles"
 })
 public class Year {
 
@@ -22,13 +25,15 @@ public class Year {
     private Integer id;
     @JsonProperty("year")
     private Integer year;
+    @JsonProperty("styles")
+    private List<Style> styles = new ArrayList<Style>();
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      *
      * @return
-     *     The id
+     * The id
      */
     @JsonProperty("id")
     public Integer getId() {
@@ -38,7 +43,7 @@ public class Year {
     /**
      *
      * @param id
-     *     The id
+     * The id
      */
     @JsonProperty("id")
     public void setId(Integer id) {
@@ -48,7 +53,7 @@ public class Year {
     /**
      *
      * @return
-     *     The year
+     * The year
      */
     @JsonProperty("year")
     public Integer getYear() {
@@ -58,11 +63,31 @@ public class Year {
     /**
      *
      * @param year
-     *     The year
+     * The year
      */
     @JsonProperty("year")
     public void setYear(Integer year) {
         this.year = year;
+    }
+
+    /**
+     *
+     * @return
+     * The styles
+     */
+    @JsonProperty("styles")
+    public List<Style> getStyles() {
+        return styles;
+    }
+
+    /**
+     *
+     * @param styles
+     * The styles
+     */
+    @JsonProperty("styles")
+    public void setStyles(List<Style> styles) {
+        this.styles = styles;
     }
 
     @JsonAnyGetter
@@ -73,14 +98,5 @@ public class Year {
     @JsonAnySetter
     public void setAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
-    }
-
-    @Override
-    public String toString() {
-        return "Year{" +
-                "id=" + id +
-                ", year=" + year +
-                ", additionalProperties=" + additionalProperties +
-                '}';
     }
 }
