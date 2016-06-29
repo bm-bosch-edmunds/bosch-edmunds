@@ -18,5 +18,5 @@
 
     <string name="snackbar_no_internet_initial"> You need Internet connection for the initial download</string>
     <string name="snackbar_action_retry">Retry</string>
-    <string name="title_activity_detail">DetailActivity</string>
+    <string name="title_activity_detail"></string>
 </resources>

@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.texocoyotl.ptedmundscars.BuildConfig;
 import com.texocoyotl.ptedmundscars.LoginActivity;
 import com.texocoyotl.ptedmundscars.R;
+import com.texocoyotl.ptedmundscars.activities.detail.DetailActivity;
 import com.texocoyotl.ptedmundscars.api.APIService;
 import com.texocoyotl.ptedmundscars.api.CarsResult;
 import com.texocoyotl.ptedmundscars.api.Make;
@@ -62,6 +63,7 @@ public class DashBoardActivity extends AppCompatActivity implements
     private static final String MAKER_NAME_KEY = "MAKER_NAME_KEY";
     private static final String STYLES_MAKER_PARAM = "STYLES_MAKER_PARAM";
     private static final String STYLES_MODEL_PARAM = "STYLES_MODEL_PARAM";
+    public static final String STYLE_ID_PARAM = "STYLE_ID_PARAM";
 
     private Subscription mCarsListSubscription;
     private CarsRecyclerViewAdapter mStylesListAdapter;
@@ -129,6 +131,15 @@ public class DashBoardActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void onDestroy() {
+        if (mCarsListSubscription != null)
+            mCarsListSubscription.unsubscribe();
+        if (mStylesListSubscription != null)
+            mStylesListSubscription.unsubscribe();
+        super.onDestroy();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_dash_board, menu);
@@ -154,7 +165,9 @@ public class DashBoardActivity extends AppCompatActivity implements
 
     @Override
     public void onListFragmentInteraction(String styleId) {
-        Toast.makeText(DashBoardActivity.this, styleId, Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(this, DetailActivity.class);
+        i.putExtra(STYLE_ID_PARAM, styleId);
+        startActivity(i);
     }
 
     @Override

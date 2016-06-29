@@ -98,4 +98,13 @@ public class Submodel {
         this.additionalProperties.put(name, value);
     }
 
+    @Override
+    public String toString() {
+        return "Submodel{" +
+                "body='" + body + '\'' +
+                ", modelName='" + modelName + '\'' +
+                ", niceName='" + niceName + '\'' +
+                ", additionalProperties=" + additionalProperties +
+                '}';
+    }
 }

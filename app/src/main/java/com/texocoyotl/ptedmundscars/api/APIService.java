@@ -14,4 +14,7 @@ public interface APIService {
 
     @GET("{maker}/{model}?state=new&view=basic&fmt=json&api_key=" + BuildConfig.API_KEY)
     Observable<Model> getStylesList(@Path("maker") String maker, @Path("model") String model);
+
+    @GET("styles/{styleId}?view=full&fmt=json&api_key=" + BuildConfig.API_KEY)
+    Observable<Style> getStyleDetail(@Path("styleId") String styleId);
 }
