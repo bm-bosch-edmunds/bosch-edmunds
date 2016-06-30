@@ -6,6 +6,12 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="detail_backdrop_height">48dp</dimen>
     <dimen name="detail_activity_horizontal_margin">16dp</dimen>
+    <dimen name="fab_margin_top">32dp</dimen>
+    <dimen name="field_padding">8dp</dimen>
+    <dimen name="medium_padding">16dp</dimen>
+    <dimen name="spinner_image_width">56dp</dimen>
+    <dimen name="spinner_image_height">56dp</dimen>
+    <dimen name="spinner_image_margin">24dp</dimen>
 
     <integer name="gallery_columns">2</integer>
 </resources>

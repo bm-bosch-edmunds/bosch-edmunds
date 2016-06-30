@@ -10,16 +10,14 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_margin="@dimen/text_margin"
-        android:text="2016"
         android:textAppearance="?attr/textAppearanceListItem" />
 
     <TextView
         android:id="@+id/cars_list_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
         android:layout_weight="1"
-        android:text="A3"
         android:textAppearance="?attr/textAppearanceListItem" />
 
     <ImageButton
@@ -27,6 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:background="@drawable/ic_keyboard_arrow_right_black_24dp" />
+        android:background="@drawable/ic_keyboard_arrow_right_black_24dp"
+        android:contentDescription="@string/content_description_styles_list" />
 
 </LinearLayout>

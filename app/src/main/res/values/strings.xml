@@ -23,6 +23,23 @@
     <string name="logo_substitution_FIAT">Fiat</string>
     <string name="logo_substitution_MINI">Mini</string>
     <string name="logo_substitution_Lincoln">Lincoln-Motor</string>
+
     <string name="content_description_manufacturer_logo">Manufacturer Logo</string>
+    <string name="content_description_styles_list">Open Detail List</string>
+    <string name="detail_header_basic_information">Basic Information</string>
+    <string name="detail_label_market">Market:</string>
+    <string name="detail_label_size">Size:</string>
+    <string name="detail_label_style">Style:</string>
+    <string name="detail_label_doors">Doors:</string>
+    <string name="detail_label_transmission">Transmission:</string>
+    <string name="detail_label_no_of_speeds">No. of Speeds:</string>
+    <string name="detail_header_engine">Engine</string>
+    <string name="detail_label_name">Name:</string>
+    <string name="detail_label_type">Type:</string>
+    <string name="detail_label_cylinders">Cylinders:</string>
+    <string name="detail_label_horse_power">Horse Power:</string>
+    <string name="detail_header_mpg">MPG</string>
+    <string name="detail_label_highway">Highway:</string>
+    <string name="detail_label_city">City:</string>
 
 </resources>

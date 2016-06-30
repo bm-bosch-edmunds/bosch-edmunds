@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,155 +11,151 @@
     tools:context="com.texocoyotl.ptedmundscars.activities.detail.DetailActivity"
     tools:showIn="@layout/activity_detail">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <LinearLayout
+
+        <TextView
+            style="@style/Details.GridTitle"
+            android:text="@string/detail_header_basic_information" />
+
+        <GridLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-
-            <TextView
-                style="@style/Details.GridTitle"
-                android:text="Basic Information" />
-
-            <GridLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:columnCount="2"
-                android:padding="8dp">
-
-                <TextView
-                    style="@style/Details.GridFirstLabel"
-                    android:text="Market:" />
-
-                <TextView
-                    android:id="@+id/detail_categories_market"
-                    style="@style/Details.GridText" />
-
-                <TextView
-                    style="@style/Details.GridSecondLabel"
-                    android:text="Size:" />
-
-                <TextView
-                    android:id="@+id/detail_categories_size"
-                    style="@style/Details.GridSecondText" />
-
-                <TextView
-                    style="@style/Details.GridSecondLabel"
-                    android:text="Style:" />
-
-                <TextView
-                    android:id="@+id/detail_categories_style"
-                    style="@style/Details.GridSecondText" />
-
-                <TextView
-                    style="@style/Details.GridSecondLabel"
-                    android:text="Doors:" />
-
-                <TextView
-                    android:id="@+id/detail_doors"
-                    style="@style/Details.GridSecondText" />
-
-                <TextView
-                    style="@style/Details.GridSecondLabel"
-                    android:text="Transmission:" />
-
-                <TextView
-                    android:id="@+id/detail_transmission"
-                    style="@style/Details.GridSecondText" />
-
-                <TextView
-                    style="@style/Details.GridSecondLabel"
-                    android:text="No. of Speeds:" />
-
-                <TextView
-                    android:id="@+id/detail_num_speeds"
-                    style="@style/Details.GridSecondText" />
-
-            </GridLayout>
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:padding="8dp">
 
             <TextView
-                style="@style/Details.GridTitle"
-                android:text="Engine" />
-
-            <GridLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:columnCount="2"
-                android:padding="8dp">
-
-                <TextView
-                    style="@style/Details.GridFirstLabel"
-                    android:text="Name:" />
-
-                <TextView
-                    android:id="@+id/detail_engine_name"
-                    style="@style/Details.GridText" />
-
-                <TextView
-                    style="@style/Details.GridSecondLabel"
-                    android:text="Type:" />
-
-                <TextView
-                    android:id="@+id/detail_engine_type"
-                    style="@style/Details.GridSecondText" />
-
-                <TextView
-                    style="@style/Details.GridSecondLabel"
-                    android:text="Cylinders:" />
-
-                <TextView
-                    android:id="@+id/detail_engine_cylinders"
-                    style="@style/Details.GridSecondText" />
-
-                <TextView
-                    style="@style/Details.GridSecondLabel"
-                    android:text="Size:" />
-
-                <TextView
-                    android:id="@+id/detail_engine_size"
-                    style="@style/Details.GridSecondText" />
-
-                <TextView
-                    style="@style/Details.GridSecondLabel"
-                    android:text="Horse Power:" />
-
-                <TextView
-                    android:id="@+id/detail_engine_horse_power"
-                    style="@style/Details.GridSecondText" />
-
-            </GridLayout>
+                style="@style/Details.GridFirstLabel"
+                android:text="@string/detail_label_market" />
 
             <TextView
-                style="@style/Details.GridTitle"
-                android:text="MPG" />
+                android:id="@+id/detail_categories_market"
+                style="@style/Details.GridText" />
 
-            <GridLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:columnCount="2"
-                android:padding="8dp">
+            <TextView
+                style="@style/Details.GridSecondLabel"
+                android:text="@string/detail_label_size" />
 
-                <TextView
-                    style="@style/Details.GridFirstLabel"
-                    android:text="Highway:" />
+            <TextView
+                android:id="@+id/detail_categories_size"
+                style="@style/Details.GridSecondText" />
 
-                <TextView
-                    android:id="@+id/detail_mpg_highway"
-                    style="@style/Details.GridText" />
+            <TextView
+                style="@style/Details.GridSecondLabel"
+                android:text="@string/detail_label_style" />
 
-                <TextView
-                    style="@style/Details.GridSecondLabel"
-                    android:text="City:" />
+            <TextView
+                android:id="@+id/detail_categories_style"
+                style="@style/Details.GridSecondText" />
 
-                <TextView
-                    android:id="@+id/detail_mpg_city"
-                    style="@style/Details.GridSecondText" />
-            </GridLayout>
+            <TextView
+                style="@style/Details.GridSecondLabel"
+                android:text="@string/detail_label_doors" />
 
-        </LinearLayout>
-    </ScrollView>
-</FrameLayout>
+            <TextView
+                android:id="@+id/detail_doors"
+                style="@style/Details.GridSecondText" />
+
+            <TextView
+                style="@style/Details.GridSecondLabel"
+                android:text="@string/detail_label_transmission" />
+
+            <TextView
+                android:id="@+id/detail_transmission"
+                style="@style/Details.GridSecondText" />
+
+            <TextView
+                style="@style/Details.GridSecondLabel"
+                android:text="@string/detail_label_no_of_speeds" />
+
+            <TextView
+                android:id="@+id/detail_num_speeds"
+                style="@style/Details.GridSecondText" />
+
+        </GridLayout>
+
+        <TextView
+            style="@style/Details.GridTitle"
+            android:text="@string/detail_header_engine" />
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:padding="8dp">
+
+            <TextView
+                style="@style/Details.GridFirstLabel"
+                android:text="@string/detail_label_name" />
+
+            <TextView
+                android:id="@+id/detail_engine_name"
+                style="@style/Details.GridText" />
+
+            <TextView
+                style="@style/Details.GridSecondLabel"
+                android:text="@string/detail_label_type" />
+
+            <TextView
+                android:id="@+id/detail_engine_type"
+                style="@style/Details.GridSecondText" />
+
+            <TextView
+                style="@style/Details.GridSecondLabel"
+                android:text="@string/detail_label_cylinders" />
+
+            <TextView
+                android:id="@+id/detail_engine_cylinders"
+                style="@style/Details.GridSecondText" />
+
+            <TextView
+                style="@style/Details.GridSecondLabel"
+                android:text="@string/detail_label_size" />
+
+            <TextView
+                android:id="@+id/detail_engine_size"
+                style="@style/Details.GridSecondText" />
+
+            <TextView
+                style="@style/Details.GridSecondLabel"
+                android:text="@string/detail_label_horse_power" />
+
+            <TextView
+                android:id="@+id/detail_engine_horse_power"
+                style="@style/Details.GridSecondText" />
+
+        </GridLayout>
+
+        <TextView
+            style="@style/Details.GridTitle"
+            android:text="@string/detail_header_mpg" />
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:padding="8dp">
+
+            <TextView
+                style="@style/Details.GridFirstLabel"
+                android:text="@string/detail_label_highway" />
+
+            <TextView
+                android:id="@+id/detail_mpg_highway"
+                style="@style/Details.GridText" />
+
+            <TextView
+                style="@style/Details.GridSecondLabel"
+                android:text="@string/detail_label_city" />
+
+            <TextView
+                android:id="@+id/detail_mpg_city"
+                style="@style/Details.GridSecondText" />
+        </GridLayout>
+
+    </LinearLayout>
+</ScrollView>
+

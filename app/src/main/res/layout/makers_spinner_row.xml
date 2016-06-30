@@ -7,9 +7,10 @@
 
     <ImageView
         android:id="@+id/makers_spinner_image"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_marginRight="24dp"
+        android:layout_width="@dimen/spinner_image_width"
+        android:layout_height="@dimen/spinner_image_height"
+        android:layout_marginEnd="@dimen/spinner_image_margin"
+        android:layout_marginRight="@dimen/spinner_image_margin"
         android:contentDescription="@string/content_description_manufacturer_logo" />
 
     <TextView
