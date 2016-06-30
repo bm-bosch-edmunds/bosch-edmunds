@@ -1,6 +1,8 @@
-package com.texocoyotl.ptedmundscars.api;
+package com.texocoyotl.ptedmundscars.api_pojos;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -10,60 +12,59 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-
 @JsonInclude(JsonInclude.Include.NON_NULL)
 
 @JsonPropertyOrder({
-        "timing",
-        "gear"
+        "makes",
+        "makesCount"
 })
-public class Valve {
+public class CarsResult {
 
-    @JsonProperty("timing")
-    private String timing;
-    @JsonProperty("gear")
-    private String gear;
+    @JsonProperty("makes")
+    private List<Make> makes = new ArrayList<Make>();
+    @JsonProperty("makesCount")
+    private Integer makesCount;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      *
      * @return
-     * The timing
+     *     The makes
      */
-    @JsonProperty("timing")
-    public String getTiming() {
-        return timing;
+    @JsonProperty("makes")
+    public List<Make> getMakes() {
+        return makes;
     }
 
     /**
      *
-     * @param timing
-     * The timing
+     * @param makes
+     *     The makes
      */
-    @JsonProperty("timing")
-    public void setTiming(String timing) {
-        this.timing = timing;
+    @JsonProperty("makes")
+    public void setMakes(List<Make> makes) {
+        this.makes = makes;
     }
 
     /**
      *
      * @return
-     * The gear
+     *     The makesCount
      */
-    @JsonProperty("gear")
-    public String getGear() {
-        return gear;
+    @JsonProperty("makesCount")
+    public Integer getMakesCount() {
+        return makesCount;
     }
 
     /**
      *
-     * @param gear
-     * The gear
+     * @param makesCount
+     *     The makesCount
      */
-    @JsonProperty("gear")
-    public void setGear(String gear) {
-        this.gear = gear;
+    @JsonProperty("makesCount")
+    public void setMakesCount(Integer makesCount) {
+        this.makesCount = makesCount;
     }
 
     @JsonAnyGetter
@@ -78,9 +79,9 @@ public class Valve {
 
     @Override
     public String toString() {
-        return "Valve{" +
-                "timing='" + timing + '\'' +
-                ", gear='" + gear + '\'' +
+        return "CarsResult{" +
+                "makes=" + makes +
+                ", makesCount=" + makesCount +
                 ", additionalProperties=" + additionalProperties +
                 '}';
     }

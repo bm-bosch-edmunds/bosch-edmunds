@@ -1,9 +1,6 @@
-package com.texocoyotl.ptedmundscars.api;
+package com.texocoyotl.ptedmundscars.api_pojos;
 
-
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -17,56 +14,56 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 
 @JsonPropertyOrder({
-        "category",
-        "options"
+        "timing",
+        "gear"
 })
-public class Color {
+public class Valve {
 
-    @JsonProperty("category")
-    private String category;
-    @JsonProperty("options")
-    private List<Option> options = new ArrayList<Option>();
+    @JsonProperty("timing")
+    private String timing;
+    @JsonProperty("gear")
+    private String gear;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      *
      * @return
-     * The category
+     * The timing
      */
-    @JsonProperty("category")
-    public String getCategory() {
-        return category;
+    @JsonProperty("timing")
+    public String getTiming() {
+        return timing;
     }
 
     /**
      *
-     * @param category
-     * The category
+     * @param timing
+     * The timing
      */
-    @JsonProperty("category")
-    public void setCategory(String category) {
-        this.category = category;
+    @JsonProperty("timing")
+    public void setTiming(String timing) {
+        this.timing = timing;
     }
 
     /**
      *
      * @return
-     * The options
+     * The gear
      */
-    @JsonProperty("options")
-    public List<Option> getOptions() {
-        return options;
+    @JsonProperty("gear")
+    public String getGear() {
+        return gear;
     }
 
     /**
      *
-     * @param options
-     * The options
+     * @param gear
+     * The gear
      */
-    @JsonProperty("options")
-    public void setOptions(List<Option> options) {
-        this.options = options;
+    @JsonProperty("gear")
+    public void setGear(String gear) {
+        this.gear = gear;
     }
 
     @JsonAnyGetter
@@ -81,9 +78,9 @@ public class Color {
 
     @Override
     public String toString() {
-        return "Color{" +
-                "category='" + category + '\'' +
-                ", options=" + options +
+        return "Valve{" +
+                "timing='" + timing + '\'' +
+                ", gear='" + gear + '\'' +
                 ", additionalProperties=" + additionalProperties +
                 '}';
     }

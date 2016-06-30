@@ -1,4 +1,7 @@
-package com.texocoyotl.ptedmundscars.api;
+package com.texocoyotl.ptedmundscars.api_pojos;
+
+
+
 
         import java.util.ArrayList;
         import java.util.HashMap;
@@ -16,78 +19,101 @@ package com.texocoyotl.ptedmundscars.api;
 
 @JsonPropertyOrder({
         "id",
-        "year",
-        "styles"
+        "name",
+        "niceName",
+        "years"
 })
-public class Year {
+public class Model {
 
     @JsonProperty("id")
-    private Integer id;
-    @JsonProperty("year")
-    private Integer year;
-    @JsonProperty("styles")
-    private List<Style> styles = new ArrayList<Style>();
+    private String id;
+    @JsonProperty("name")
+    private String name;
+    @JsonProperty("niceName")
+    private String niceName;
+    @JsonProperty("years")
+    private List<Year> years = new ArrayList<Year>();
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      *
      * @return
-     * The id
+     *     The id
      */
     @JsonProperty("id")
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
     /**
      *
      * @param id
-     * The id
+     *     The id
      */
     @JsonProperty("id")
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
     /**
      *
      * @return
-     * The year
+     *     The name
      */
-    @JsonProperty("year")
-    public Integer getYear() {
-        return year;
+    @JsonProperty("name")
+    public String getName() {
+        return name;
     }
 
     /**
      *
-     * @param year
-     * The year
+     * @param name
+     *     The name
      */
-    @JsonProperty("year")
-    public void setYear(Integer year) {
-        this.year = year;
+    @JsonProperty("name")
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
      *
      * @return
-     * The styles
+     *     The niceName
      */
-    @JsonProperty("styles")
-    public List<Style> getStyles() {
-        return styles;
+    @JsonProperty("niceName")
+    public String getNiceName() {
+        return niceName;
     }
 
     /**
      *
-     * @param styles
-     * The styles
+     * @param niceName
+     *     The niceName
      */
-    @JsonProperty("styles")
-    public void setStyles(List<Style> styles) {
-        this.styles = styles;
+    @JsonProperty("niceName")
+    public void setNiceName(String niceName) {
+        this.niceName = niceName;
+    }
+
+    /**
+     *
+     * @return
+     *     The years
+     */
+    @JsonProperty("years")
+    public List<Year> getYears() {
+        return years;
+    }
+
+    /**
+     *
+     * @param years
+     *     The years
+     */
+    @JsonProperty("years")
+    public void setYears(List<Year> years) {
+        this.years = years;
     }
 
     @JsonAnyGetter
@@ -102,11 +128,13 @@ public class Year {
 
     @Override
     public String toString() {
-        return "Year{" +
-                "id=" + id +
-                ", year=" + year +
-                ", styles=" + styles +
+        return "Model{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", niceName='" + niceName + '\'' +
+                ", years=" + years +
                 ", additionalProperties=" + additionalProperties +
                 '}';
     }
 }
+

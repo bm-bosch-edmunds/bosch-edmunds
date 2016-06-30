@@ -1,4 +1,4 @@
-package com.texocoyotl.ptedmundscars.api;
+package com.texocoyotl.ptedmundscars.api_pojos;
 
 import java.util.HashMap;
 import java.util.Map;

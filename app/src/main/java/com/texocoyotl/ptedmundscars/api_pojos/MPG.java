@@ -1,4 +1,5 @@
-package com.texocoyotl.ptedmundscars.api;
+package com.texocoyotl.ptedmundscars.api_pojos;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,33 +15,56 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 
 @JsonPropertyOrder({
-        "primary"
+        "highway",
+        "city"
 })
-public class ColorChips {
+public class MPG {
 
-    @JsonProperty("primary")
-    private Primary primary;
+    @JsonProperty("highway")
+    private String highway;
+    @JsonProperty("city")
+    private String city;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      *
      * @return
-     * The primary
+     * The highway
      */
-    @JsonProperty("primary")
-    public Primary getPrimary() {
-        return primary;
+    @JsonProperty("highway")
+    public String getHighway() {
+        return highway;
     }
 
     /**
      *
-     * @param primary
-     * The primary
+     * @param highway
+     * The highway
      */
-    @JsonProperty("primary")
-    public void setPrimary(Primary primary) {
-        this.primary = primary;
+    @JsonProperty("highway")
+    public void setHighway(String highway) {
+        this.highway = highway;
+    }
+
+    /**
+     *
+     * @return
+     * The city
+     */
+    @JsonProperty("city")
+    public String getCity() {
+        return city;
+    }
+
+    /**
+     *
+     * @param city
+     * The city
+     */
+    @JsonProperty("city")
+    public void setCity(String city) {
+        this.city = city;
     }
 
     @JsonAnyGetter
@@ -55,8 +79,9 @@ public class ColorChips {
 
     @Override
     public String toString() {
-        return "ColorChips{" +
-                "primary=" + primary +
+        return "MPG{" +
+                "highway='" + highway + '\'' +
+                ", city='" + city + '\'' +
                 ", additionalProperties=" + additionalProperties +
                 '}';
     }

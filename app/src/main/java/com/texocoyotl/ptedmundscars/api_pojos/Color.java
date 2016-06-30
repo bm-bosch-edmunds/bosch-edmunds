@@ -1,7 +1,9 @@
-package com.texocoyotl.ptedmundscars.api;
+package com.texocoyotl.ptedmundscars.api_pojos;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -15,56 +17,56 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 
 @JsonPropertyOrder({
-        "highway",
-        "city"
+        "category",
+        "options"
 })
-public class MPG {
+public class Color {
 
-    @JsonProperty("highway")
-    private String highway;
-    @JsonProperty("city")
-    private String city;
+    @JsonProperty("category")
+    private String category;
+    @JsonProperty("options")
+    private List<Option> options = new ArrayList<Option>();
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     /**
      *
      * @return
-     * The highway
+     * The category
      */
-    @JsonProperty("highway")
-    public String getHighway() {
-        return highway;
+    @JsonProperty("category")
+    public String getCategory() {
+        return category;
     }
 
     /**
      *
-     * @param highway
-     * The highway
+     * @param category
+     * The category
      */
-    @JsonProperty("highway")
-    public void setHighway(String highway) {
-        this.highway = highway;
+    @JsonProperty("category")
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     /**
      *
      * @return
-     * The city
+     * The options
      */
-    @JsonProperty("city")
-    public String getCity() {
-        return city;
+    @JsonProperty("options")
+    public List<Option> getOptions() {
+        return options;
     }
 
     /**
      *
-     * @param city
-     * The city
+     * @param options
+     * The options
      */
-    @JsonProperty("city")
-    public void setCity(String city) {
-        this.city = city;
+    @JsonProperty("options")
+    public void setOptions(List<Option> options) {
+        this.options = options;
     }
 
     @JsonAnyGetter
@@ -79,9 +81,9 @@ public class MPG {
 
     @Override
     public String toString() {
-        return "MPG{" +
-                "highway='" + highway + '\'' +
-                ", city='" + city + '\'' +
+        return "Color{" +
+                "category='" + category + '\'' +
+                ", options=" + options +
                 ", additionalProperties=" + additionalProperties +
                 '}';
     }

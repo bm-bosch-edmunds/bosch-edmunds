@@ -14,18 +14,18 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.texocoyotl.ptedmundscars.BuildConfig;
 import com.texocoyotl.ptedmundscars.R;
 import com.texocoyotl.ptedmundscars.activities.dashboard.DashBoardActivity;
 import com.texocoyotl.ptedmundscars.activities.gallery.GalleryActivity;
-import com.texocoyotl.ptedmundscars.api.APIService;
-import com.texocoyotl.ptedmundscars.api.Categories;
-import com.texocoyotl.ptedmundscars.api.Engine;
-import com.texocoyotl.ptedmundscars.api.MPG;
-import com.texocoyotl.ptedmundscars.api.Style;
-import com.texocoyotl.ptedmundscars.api.Transmission;
+import com.texocoyotl.ptedmundscars.retrofit.APIService;
+import com.texocoyotl.ptedmundscars.api_pojos.Categories;
+import com.texocoyotl.ptedmundscars.api_pojos.Engine;
+import com.texocoyotl.ptedmundscars.api_pojos.MPG;
+import com.texocoyotl.ptedmundscars.api_pojos.Style;
+import com.texocoyotl.ptedmundscars.api_pojos.Transmission;
+import com.texocoyotl.ptedmundscars.retrofit.RetrofitHelper;
 
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -39,9 +39,8 @@ import rx.schedulers.Schedulers;
 
 public class DetailActivity extends AppCompatActivity {
 
-    private static final String TAG = "DetailTAG_";
     public static final String STYLE_ID_KEY = "STYLE_ID_KEY";
-
+    private static final String TAG = "DetailTAG_";
     private Subscription mStyleDetailSubscription;
     private FloatingActionButton fab;
     private String mStyleId;
@@ -112,14 +111,7 @@ public class DetailActivity extends AppCompatActivity {
             return;
         }
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BuildConfig.BASE_API_URL)
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io()))
-                .addConverterFactory(JacksonConverterFactory.create())
-                .build();
-
-        APIService apiService = retrofit.create(APIService.class);
-
+        APIService apiService = RetrofitHelper.getAPIService(BuildConfig.BASE_API_URL);
         Observable<Style> mStyleDetailAPIcall = apiService.getStyleDetail(mStyleId);
 
         mStyleDetailSubscription = mStyleDetailAPIcall

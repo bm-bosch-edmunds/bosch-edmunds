@@ -1,4 +1,4 @@
-package com.texocoyotl.ptedmundscars.activities.dashboard;
+package com.texocoyotl.ptedmundscars.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -10,8 +10,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.texocoyotl.ptedmundscars.R;
+import com.texocoyotl.ptedmundscars.activities.dashboard.OnStylesListInteractionListener;
 import com.texocoyotl.ptedmundscars.data.Contract;
-import com.texocoyotl.ptedmundscars.utils.CursorRecyclerViewAdapter;
 
 
 public class CarsRecyclerViewAdapter extends CursorRecyclerViewAdapter<CarsRecyclerViewAdapter.ViewHolder> {

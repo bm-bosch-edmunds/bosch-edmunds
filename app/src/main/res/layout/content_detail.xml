@@ -23,19 +23,17 @@
 
             <TextView
                 style="@style/Details.GridTitle"
-                android:text="Basic Information"
-                />
+                android:text="Basic Information" />
 
             <GridLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:columnCount="2"
-                android:padding="8dp"
-                >
+                android:padding="8dp">
 
                 <TextView
                     style="@style/Details.GridFirstLabel"
-                    android:text="Market:"/>
+                    android:text="Market:" />
 
                 <TextView
                     android:id="@+id/detail_categories_market"
@@ -47,7 +45,7 @@
 
                 <TextView
                     android:id="@+id/detail_categories_size"
-                    style="@style/Details.GridSecondText"/>
+                    style="@style/Details.GridSecondText" />
 
                 <TextView
                     style="@style/Details.GridSecondLabel"
@@ -55,31 +53,31 @@
 
                 <TextView
                     android:id="@+id/detail_categories_style"
-                    style="@style/Details.GridSecondText"/>
+                    style="@style/Details.GridSecondText" />
 
                 <TextView
                     style="@style/Details.GridSecondLabel"
-                    android:text="Doors:"/>
+                    android:text="Doors:" />
 
                 <TextView
                     android:id="@+id/detail_doors"
-                    style="@style/Details.GridSecondText"/>
+                    style="@style/Details.GridSecondText" />
 
                 <TextView
                     style="@style/Details.GridSecondLabel"
-                    android:text="Transmission:"/>
+                    android:text="Transmission:" />
 
                 <TextView
                     android:id="@+id/detail_transmission"
-                    style="@style/Details.GridSecondText"/>
+                    style="@style/Details.GridSecondText" />
 
                 <TextView
                     style="@style/Details.GridSecondLabel"
-                    android:text="No. of Speeds:"/>
+                    android:text="No. of Speeds:" />
 
                 <TextView
                     android:id="@+id/detail_num_speeds"
-                    style="@style/Details.GridSecondText"/>
+                    style="@style/Details.GridSecondText" />
 
             </GridLayout>
 
@@ -91,16 +89,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:columnCount="2"
-                android:padding="8dp"
-                >
+                android:padding="8dp">
 
                 <TextView
                     style="@style/Details.GridFirstLabel"
-                    android:text="Name:"/>
+                    android:text="Name:" />
 
                 <TextView
                     android:id="@+id/detail_engine_name"
-                    style="@style/Details.GridText"/>
+                    style="@style/Details.GridText" />
 
                 <TextView
                     style="@style/Details.GridSecondLabel"
@@ -108,7 +105,7 @@
 
                 <TextView
                     android:id="@+id/detail_engine_type"
-                    style="@style/Details.GridSecondText"/>
+                    style="@style/Details.GridSecondText" />
 
                 <TextView
                     style="@style/Details.GridSecondLabel"
@@ -116,7 +113,7 @@
 
                 <TextView
                     android:id="@+id/detail_engine_cylinders"
-                    style="@style/Details.GridSecondText"/>
+                    style="@style/Details.GridSecondText" />
 
                 <TextView
                     style="@style/Details.GridSecondLabel"
@@ -124,7 +121,7 @@
 
                 <TextView
                     android:id="@+id/detail_engine_size"
-                    style="@style/Details.GridSecondText"/>
+                    style="@style/Details.GridSecondText" />
 
                 <TextView
                     style="@style/Details.GridSecondLabel"
@@ -132,7 +129,7 @@
 
                 <TextView
                     android:id="@+id/detail_engine_horse_power"
-                    style="@style/Details.GridSecondText"/>
+                    style="@style/Details.GridSecondText" />
 
             </GridLayout>
 
@@ -144,16 +141,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:columnCount="2"
-                android:padding="8dp"
-                >
+                android:padding="8dp">
 
                 <TextView
                     style="@style/Details.GridFirstLabel"
-                    android:text="Highway:"/>
+                    android:text="Highway:" />
 
                 <TextView
                     android:id="@+id/detail_mpg_highway"
-                    style="@style/Details.GridText"/>
+                    style="@style/Details.GridText" />
 
                 <TextView
                     style="@style/Details.GridSecondLabel"
@@ -161,7 +157,7 @@
 
                 <TextView
                     android:id="@+id/detail_mpg_city"
-                    style="@style/Details.GridSecondText"/>
+                    style="@style/Details.GridSecondText" />
             </GridLayout>
 
         </LinearLayout>

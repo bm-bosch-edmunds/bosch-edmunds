@@ -50,7 +50,7 @@ public class Contract {
 
         public static final String MAKERS_QUERY =
                 "SELECT " + COLUMN_MANUFACTURER + " AS _id, " +
-                       COLUMN_MANUFACTURER + " AS name, " +
+                        COLUMN_MANUFACTURER + " AS name, " +
                         COLUMN_WEB_MANUFACTURER + " AS web_name FROM " +
                         TABLE_NAME + " GROUP BY " +
                         COLUMN_MANUFACTURER + ", " +
@@ -81,6 +81,19 @@ public class Contract {
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_TYPE = "type";
         public static final String COLUMN_SUBMODEL = "submodel";
+        public static final String COLUMN_MARKET = "market";
+        public static final String COLUMN_SIZE = "size";
+        public static final String COLUMN_CAT_STYLE = "cat_size";
+        public static final String COLUMN_DOORS = "doors";
+        public static final String COLUMN_TRANSMISSION = "transmission";
+        public static final String COLUMN_SPEEDS = "speeds";
+        public static final String COLUMN_ENGINE_NAME = "engine_name";
+        public static final String COLUMN_ENGINE_TYPE = "engine_type";
+        public static final String COLUMN_CYLINDERS = "cylinders";
+        public static final String COLUMN_ENGINE_SIZE = "engine_size";
+        public static final String COLUMN_HORSE_POWER = "horse_power";
+        public static final String COLUMN_MPG_HIGHWAY = "mpg_highway";
+        public static final String COLUMN_MPG_CITY = "mpg_city";
 
         public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME +
                 "(" +

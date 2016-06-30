@@ -7,31 +7,22 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.texocoyotl.ptedmundscars.BuildConfig;
 import com.texocoyotl.ptedmundscars.R;
-import com.texocoyotl.ptedmundscars.activities.dashboard.DashBoardActivity;
 import com.texocoyotl.ptedmundscars.activities.detail.DetailActivity;
-import com.texocoyotl.ptedmundscars.api.APIService;
-import com.texocoyotl.ptedmundscars.api.Categories;
-import com.texocoyotl.ptedmundscars.api.Engine;
-import com.texocoyotl.ptedmundscars.api.Gallery;
-import com.texocoyotl.ptedmundscars.api.MPG;
-import com.texocoyotl.ptedmundscars.api.Style;
-import com.texocoyotl.ptedmundscars.api.Transmission;
+import com.texocoyotl.ptedmundscars.retrofit.APIService;
+import com.texocoyotl.ptedmundscars.api_pojos.Gallery;
+import com.texocoyotl.ptedmundscars.retrofit.RetrofitHelper;
 
 import java.util.Collections;
 import java.util.List;
@@ -43,7 +34,6 @@ import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 public class GalleryActivity extends AppCompatActivity {
@@ -102,14 +92,7 @@ public class GalleryActivity extends AppCompatActivity {
             return;
         }
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BuildConfig.BASE_IMAGES_API_URL)
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io()))
-                .addConverterFactory(JacksonConverterFactory.create())
-                .build();
-
-        APIService apiService = retrofit.create(APIService.class);
-
+        APIService apiService = RetrofitHelper.getAPIService(BuildConfig.BASE_IMAGES_API_URL);
         Observable<List<Gallery>> mGalleryAPIcall = apiService.getGallery(mStyleId);
 
         mGallerySubscription = mGalleryAPIcall

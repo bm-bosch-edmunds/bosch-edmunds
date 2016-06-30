@@ -1,4 +1,4 @@
-package com.texocoyotl.ptedmundscars.utils;
+package com.texocoyotl.ptedmundscars.adapters;
 
 /*
  * Copyright (C) 2014 skyfish.jy@gmail.com

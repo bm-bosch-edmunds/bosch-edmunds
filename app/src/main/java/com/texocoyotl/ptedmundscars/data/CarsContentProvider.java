@@ -10,16 +10,14 @@ import android.net.Uri;
 
 
 public class CarsContentProvider extends ContentProvider {
-    public CarsContentProvider() {
-    }
-
-    private CarsDatabaseHelper mDatabaseHelper;
-
     static final int MATCH_MODELS = 100;
     static final int MATCH_MAKERS = 101;
     static final int MATCH_STYLES = 102;
-
     private static final UriMatcher sUriMatcher = buildUriMatcher();
+    private CarsDatabaseHelper mDatabaseHelper;
+
+    public CarsContentProvider() {
+    }
 
     private static UriMatcher buildUriMatcher() {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);

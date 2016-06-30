@@ -2,8 +2,9 @@
     <string name="app_name">Edmunds Cars</string>
     <string name="action_logout">Log Out</string>
     <string name="title_activity_login">Sign in</string>
+    <string name="title_activity_detail"> </string>
+    <string name="title_activity_gallery">Gallery</string>
 
-    <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in</string>
@@ -18,11 +19,10 @@
 
     <string name="snackbar_no_internet_initial"> You need Internet connection for the initial download</string>
     <string name="snackbar_action_retry">Retry</string>
-    <string name="title_activity_detail"></string>
-    <string name="title_activity_gallery">GalleryActivity</string>
 
     <string name="logo_substitution_FIAT">Fiat</string>
     <string name="logo_substitution_MINI">Mini</string>
     <string name="logo_substitution_Lincoln">Lincoln-Motor</string>
+    <string name="content_description_manufacturer_logo">Manufacturer Logo</string>
 
 </resources>

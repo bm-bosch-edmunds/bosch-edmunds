@@ -1,6 +1,10 @@
-package com.texocoyotl.ptedmundscars.api;
+package com.texocoyotl.ptedmundscars.retrofit;
 
 import com.texocoyotl.ptedmundscars.BuildConfig;
+import com.texocoyotl.ptedmundscars.api_pojos.CarsResult;
+import com.texocoyotl.ptedmundscars.api_pojos.Gallery;
+import com.texocoyotl.ptedmundscars.api_pojos.Model;
+import com.texocoyotl.ptedmundscars.api_pojos.Style;
 
 import java.util.List;
 

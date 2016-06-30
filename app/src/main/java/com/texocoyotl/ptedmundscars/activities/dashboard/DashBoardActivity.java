@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
@@ -34,13 +33,15 @@ import com.texocoyotl.ptedmundscars.BuildConfig;
 import com.texocoyotl.ptedmundscars.activities.login.LoginActivity;
 import com.texocoyotl.ptedmundscars.R;
 import com.texocoyotl.ptedmundscars.activities.detail.DetailActivity;
-import com.texocoyotl.ptedmundscars.api.APIService;
-import com.texocoyotl.ptedmundscars.api.CarsResult;
-import com.texocoyotl.ptedmundscars.api.Make;
-import com.texocoyotl.ptedmundscars.api.Model;
-import com.texocoyotl.ptedmundscars.api.Style;
-import com.texocoyotl.ptedmundscars.api.Year;
+import com.texocoyotl.ptedmundscars.adapters.CarsRecyclerViewAdapter;
+import com.texocoyotl.ptedmundscars.retrofit.APIService;
+import com.texocoyotl.ptedmundscars.api_pojos.CarsResult;
+import com.texocoyotl.ptedmundscars.api_pojos.Make;
+import com.texocoyotl.ptedmundscars.api_pojos.Model;
+import com.texocoyotl.ptedmundscars.api_pojos.Style;
+import com.texocoyotl.ptedmundscars.api_pojos.Year;
 import com.texocoyotl.ptedmundscars.data.Contract;
+import com.texocoyotl.ptedmundscars.retrofit.RetrofitHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,26 +61,23 @@ public class DashBoardActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor>,
         OnStylesListInteractionListener {
 
+    public static final String STYLE_ID_PARAM = "STYLE_ID_PARAM";
     private static final String TAG = "DashBoardTAG_";
     private static final int MAKERS_LIST_LOADER = 0;
     private static final int MODELS_LIST_LOADER = 1;
     private static final int STYLES_LIST_LOADER = 2;
-
     private static final String MAKER_NAME_KEY = "MAKER_NAME_KEY";
     private static final String STYLES_MAKER_PARAM = "STYLES_MAKER_PARAM";
     private static final String STYLES_MODEL_PARAM = "STYLES_MODEL_PARAM";
-    public static final String STYLE_ID_PARAM = "STYLE_ID_PARAM";
-
     private static final String lastDownloadKey = "LAST_DOWNLOAD";
     private static final long DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
-
+    RelativeLayout mLoadingPanel;
     private Subscription mCarsListSubscription;
     private CarsRecyclerViewAdapter mStylesListAdapter;
     private SimpleCursorAdapter mMakersSpinnerAdapter;
     private SimpleCursorAdapter mModelsSpinnerAdapter;
     private Spinner mModelsSpinner;
     private Subscription mStylesListSubscription;
-    RelativeLayout mLoadingPanel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +89,7 @@ public class DashBoardActivity extends AppCompatActivity implements
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         long lastSync = prefs.getLong(lastDownloadKey, 0);
         long timestamp = System.currentTimeMillis();
-        if (timestamp - lastSync >= 0) {
+        if (timestamp - lastSync >= DAY_IN_MILLIS) {
 
             getContentResolver().delete(Contract.CarsEntry.CONTENT_URI, null, null);
             getContentResolver().delete(Contract.StylesEntry.CONTENT_URI, null, null);
@@ -296,14 +294,7 @@ public class DashBoardActivity extends AppCompatActivity implements
             return;
         }
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BuildConfig.BASE_API_URL)
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io()))
-                .addConverterFactory(JacksonConverterFactory.create())
-                .build();
-
-        APIService apiService = retrofit.create(APIService.class);
-
+        APIService apiService = RetrofitHelper.getAPIService(BuildConfig.BASE_API_URL);
         Observable<CarsResult> mCarsListAPIcall = apiService.getCarsList();
 
         mCarsListSubscription = mCarsListAPIcall
@@ -393,14 +384,7 @@ public class DashBoardActivity extends AppCompatActivity implements
         final String maker = mMakersSpinnerAdapter.getCursor().getString(Contract.CarsEntry.MAKERS_QUERY_WEB_MANUFACTURERS_COLNUM);
         final String model = mModelsSpinnerAdapter.getCursor().getString(Contract.ModelsListQuery.COLNUM_WEB_NAME);
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BuildConfig.BASE_API_URL)
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io()))
-                .addConverterFactory(JacksonConverterFactory.create())
-                .build();
-
-        APIService apiService = retrofit.create(APIService.class);
-
+        APIService apiService = RetrofitHelper.getAPIService(BuildConfig.BASE_API_URL);
         Observable<Model> mStylesListAPIcall = apiService.getStylesList(maker, model);
 
         mStylesListSubscription = mStylesListAPIcall
@@ -475,16 +459,19 @@ public class DashBoardActivity extends AppCompatActivity implements
     }
 
 
-
     public void updateStylesList(View view){
 
-        String maker = mMakersSpinnerAdapter.getCursor().getString(Contract.CarsEntry.MAKERS_QUERY_WEB_MANUFACTURERS_COLNUM);
-        String model = mModelsSpinnerAdapter.getCursor().getString(Contract.ModelsListQuery.COLNUM_WEB_NAME);
+        Cursor makerCursor = mMakersSpinnerAdapter.getCursor();
+        Cursor modelCursor =  mModelsSpinnerAdapter.getCursor();
+        if (makerCursor != null && modelCursor != null) {
+            String maker = makerCursor.getString(Contract.CarsEntry.MAKERS_QUERY_WEB_MANUFACTURERS_COLNUM);
+            String model = modelCursor.getString(Contract.ModelsListQuery.COLNUM_WEB_NAME);
 
-        Bundle params = new Bundle();
-        params.putString(STYLES_MAKER_PARAM, maker);
-        params.putString(STYLES_MODEL_PARAM, model);
+            Bundle params = new Bundle();
+            params.putString(STYLES_MAKER_PARAM, maker);
+            params.putString(STYLES_MODEL_PARAM, model);
 
-        getSupportLoaderManager().restartLoader(STYLES_LIST_LOADER, params, DashBoardActivity.this);
+            getSupportLoaderManager().restartLoader(STYLES_LIST_LOADER, params, DashBoardActivity.this);
+        }
     }
 }
