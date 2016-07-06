@@ -29,6 +29,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.texocoyotl.ptedmundscars.App;
 import com.texocoyotl.ptedmundscars.BuildConfig;
 import com.texocoyotl.ptedmundscars.activities.login.LoginActivity;
 import com.texocoyotl.ptedmundscars.R;
@@ -41,14 +42,12 @@ import com.texocoyotl.ptedmundscars.api_pojos.Model;
 import com.texocoyotl.ptedmundscars.api_pojos.Style;
 import com.texocoyotl.ptedmundscars.api_pojos.Year;
 import com.texocoyotl.ptedmundscars.data.Contract;
-import com.texocoyotl.ptedmundscars.retrofit.RetrofitHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.jackson.JacksonConverterFactory;
+import javax.inject.Inject;
+
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
@@ -79,10 +78,15 @@ public class DashBoardActivity extends AppCompatActivity implements
     private Spinner mModelsSpinner;
     private Subscription mStylesListSubscription;
 
+    @Inject
+    APIService mAPIService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dash_board);
+
+        ((App) getApplication()).getRetroFitComponent().inject(this);
 
         initWidgets();
 
@@ -294,8 +298,7 @@ public class DashBoardActivity extends AppCompatActivity implements
             return;
         }
 
-        APIService apiService = RetrofitHelper.getAPIService(BuildConfig.BASE_API_URL);
-        Observable<CarsResult> mCarsListAPIcall = apiService.getCarsList();
+        Observable<CarsResult> mCarsListAPIcall = mAPIService.getCarsList();
 
         mCarsListSubscription = mCarsListAPIcall
                 .subscribeOn(Schedulers.newThread())
@@ -384,8 +387,7 @@ public class DashBoardActivity extends AppCompatActivity implements
         final String maker = mMakersSpinnerAdapter.getCursor().getString(Contract.CarsEntry.MAKERS_QUERY_WEB_MANUFACTURERS_COLNUM);
         final String model = mModelsSpinnerAdapter.getCursor().getString(Contract.ModelsListQuery.COLNUM_WEB_NAME);
 
-        APIService apiService = RetrofitHelper.getAPIService(BuildConfig.BASE_API_URL);
-        Observable<Model> mStylesListAPIcall = apiService.getStylesList(maker, model);
+        Observable<Model> mStylesListAPIcall = mAPIService.getStylesList(maker, model);
 
         mStylesListSubscription = mStylesListAPIcall
                 .subscribeOn(Schedulers.newThread())

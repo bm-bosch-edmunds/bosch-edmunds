@@ -17,19 +17,18 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
+import com.texocoyotl.ptedmundscars.App;
 import com.texocoyotl.ptedmundscars.BuildConfig;
 import com.texocoyotl.ptedmundscars.R;
 import com.texocoyotl.ptedmundscars.activities.detail.DetailActivity;
 import com.texocoyotl.ptedmundscars.retrofit.APIService;
 import com.texocoyotl.ptedmundscars.api_pojos.Gallery;
-import com.texocoyotl.ptedmundscars.retrofit.RetrofitHelper;
 
 import java.util.Collections;
 import java.util.List;
 
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.jackson.JacksonConverterFactory;
+import javax.inject.Inject;
+
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
@@ -44,6 +43,9 @@ public class GalleryActivity extends AppCompatActivity {
     private ImageView[] imgs;
     private GridLayout grid;
 
+    @Inject
+    APIService mAPIService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,8 +54,9 @@ public class GalleryActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        grid = (GridLayout) findViewById(R.id.gallery_grid);
+        ((App) getApplication()).getRetroFitImagesComponent().inject(this);
 
+        grid = (GridLayout) findViewById(R.id.gallery_grid);
 
         mStyleId = getIntent().getStringExtra(DetailActivity.STYLE_ID_KEY);
         if (mStyleId != null) {
@@ -92,8 +95,7 @@ public class GalleryActivity extends AppCompatActivity {
             return;
         }
 
-        APIService apiService = RetrofitHelper.getAPIService(BuildConfig.BASE_IMAGES_API_URL);
-        Observable<List<Gallery>> mGalleryAPIcall = apiService.getGallery(mStyleId);
+        Observable<List<Gallery>> mGalleryAPIcall = mAPIService.getGallery(mStyleId);
 
         mGallerySubscription = mGalleryAPIcall
                 .subscribeOn(Schedulers.newThread())
@@ -129,8 +131,6 @@ public class GalleryActivity extends AppCompatActivity {
                                 int height = metrics.heightPixels;
 
                                 ImageView img= new ImageView(self);
-//                                GridLayout.LayoutParams params = new GridLayout.LayoutParams(width, height/2);
-//                                img.setLayoutParams(params);
 
                                 grid.addView(img);
 

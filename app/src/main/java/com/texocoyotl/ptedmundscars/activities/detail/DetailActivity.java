@@ -15,7 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.texocoyotl.ptedmundscars.BuildConfig;
+import com.texocoyotl.ptedmundscars.App;
 import com.texocoyotl.ptedmundscars.R;
 import com.texocoyotl.ptedmundscars.activities.dashboard.DashBoardActivity;
 import com.texocoyotl.ptedmundscars.activities.gallery.GalleryActivity;
@@ -25,11 +25,9 @@ import com.texocoyotl.ptedmundscars.api_pojos.Engine;
 import com.texocoyotl.ptedmundscars.api_pojos.MPG;
 import com.texocoyotl.ptedmundscars.api_pojos.Style;
 import com.texocoyotl.ptedmundscars.api_pojos.Transmission;
-import com.texocoyotl.ptedmundscars.retrofit.RetrofitHelper;
 
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.jackson.JacksonConverterFactory;
+import javax.inject.Inject;
+
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
@@ -45,6 +43,9 @@ public class DetailActivity extends AppCompatActivity {
     private FloatingActionButton fab;
     private String mStyleId;
 
+    @Inject
+    APIService mAPIService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +53,8 @@ public class DetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        ((App) getApplication()).getRetroFitComponent().inject(this);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
 
@@ -111,8 +114,7 @@ public class DetailActivity extends AppCompatActivity {
             return;
         }
 
-        APIService apiService = RetrofitHelper.getAPIService(BuildConfig.BASE_API_URL);
-        Observable<Style> mStyleDetailAPIcall = apiService.getStyleDetail(mStyleId);
+        Observable<Style> mStyleDetailAPIcall = mAPIService.getStyleDetail(mStyleId);
 
         mStyleDetailSubscription = mStyleDetailAPIcall
                 .subscribeOn(Schedulers.newThread())
