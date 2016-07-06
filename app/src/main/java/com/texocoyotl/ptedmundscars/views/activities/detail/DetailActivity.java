@@ -1,4 +1,4 @@
-package com.texocoyotl.ptedmundscars.activities.detail;
+package com.texocoyotl.ptedmundscars.views.activities.detail;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -17,8 +17,8 @@ import android.widget.TextView;
 
 import com.texocoyotl.ptedmundscars.App;
 import com.texocoyotl.ptedmundscars.R;
-import com.texocoyotl.ptedmundscars.activities.dashboard.DashBoardActivity;
-import com.texocoyotl.ptedmundscars.activities.gallery.GalleryActivity;
+import com.texocoyotl.ptedmundscars.views.activities.dashboard.DashBoardActivity;
+import com.texocoyotl.ptedmundscars.views.activities.gallery.GalleryActivity;
 import com.texocoyotl.ptedmundscars.retrofit.APIService;
 import com.texocoyotl.ptedmundscars.api_pojos.Categories;
 import com.texocoyotl.ptedmundscars.api_pojos.Engine;

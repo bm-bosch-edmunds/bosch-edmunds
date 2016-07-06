@@ -10,7 +10,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.texocoyotl.ptedmundscars.R;
-import com.texocoyotl.ptedmundscars.activities.dashboard.OnStylesListInteractionListener;
+import com.texocoyotl.ptedmundscars.views.activities.dashboard.OnStylesListInteractionListener;
 import com.texocoyotl.ptedmundscars.data.Contract;
 
 

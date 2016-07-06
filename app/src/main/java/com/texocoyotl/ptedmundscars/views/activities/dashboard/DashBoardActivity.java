@@ -1,4 +1,4 @@
-package com.texocoyotl.ptedmundscars.activities.dashboard;
+package com.texocoyotl.ptedmundscars.views.activities.dashboard;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -31,10 +31,9 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.texocoyotl.ptedmundscars.App;
 import com.texocoyotl.ptedmundscars.BuildConfig;
-import com.texocoyotl.ptedmundscars.activities.gallery.GalleryActivity;
-import com.texocoyotl.ptedmundscars.activities.login.LoginActivity;
+import com.texocoyotl.ptedmundscars.views.activities.login.LoginActivity;
 import com.texocoyotl.ptedmundscars.R;
-import com.texocoyotl.ptedmundscars.activities.detail.DetailActivity;
+import com.texocoyotl.ptedmundscars.views.activities.detail.DetailActivity;
 import com.texocoyotl.ptedmundscars.adapters.CarsRecyclerViewAdapter;
 import com.texocoyotl.ptedmundscars.retrofit.APIService;
 import com.texocoyotl.ptedmundscars.api_pojos.CarsResult;
