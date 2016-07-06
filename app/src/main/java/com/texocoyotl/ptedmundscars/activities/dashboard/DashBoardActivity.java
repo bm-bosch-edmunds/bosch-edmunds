@@ -31,6 +31,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.texocoyotl.ptedmundscars.App;
 import com.texocoyotl.ptedmundscars.BuildConfig;
+import com.texocoyotl.ptedmundscars.activities.gallery.GalleryActivity;
 import com.texocoyotl.ptedmundscars.activities.login.LoginActivity;
 import com.texocoyotl.ptedmundscars.R;
 import com.texocoyotl.ptedmundscars.activities.detail.DetailActivity;
@@ -287,7 +288,7 @@ public class DashBoardActivity extends AppCompatActivity implements
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 
         if (activeNetwork == null) {
-            Snackbar.make(null, getString(R.string.snackbar_no_internet_initial), Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(mLoadingPanel, R.string.snackbar_no_internet_initial, Snackbar.LENGTH_INDEFINITE)
                     .setAction(getString(R.string.snackbar_action_retry), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -373,7 +374,7 @@ public class DashBoardActivity extends AppCompatActivity implements
 
         if (activeNetwork == null) {
             mLoadingPanel.setVisibility(View.GONE);
-            Snackbar.make(null, getString(R.string.snackbar_no_internet_initial), Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(mLoadingPanel, R.string.snackbar_no_internet_initial, Snackbar.LENGTH_INDEFINITE)
                     .setAction(getString(R.string.snackbar_action_retry), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

@@ -84,7 +84,7 @@ public class GalleryActivity extends AppCompatActivity {
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 
         if (activeNetwork == null) {
-            Snackbar.make(null, getString(R.string.snackbar_no_internet_initial), Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(grid, getString(R.string.snackbar_no_internet_initial), Snackbar.LENGTH_INDEFINITE)
                     .setAction(getString(R.string.snackbar_action_retry), new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -119,17 +119,11 @@ public class GalleryActivity extends AppCompatActivity {
                                 Gallery gallery = galleries.get(i);
                                 List<String> photos = gallery.getPhotoSrcs();
                                 Collections.sort(photos);
-                                String url = photos.size() > 5 ? photos.get(5) : "";
+                                String url = photos.size() > 1 ? photos.get(photos.size() / 2) : photos.get(0);
 
                                 Log.d(TAG, "onNext: Loading url " + url);
 
                                 GalleryActivity self = GalleryActivity.this;
-                                DisplayMetrics metrics = new DisplayMetrics();
-                                getWindowManager().getDefaultDisplay().getMetrics(metrics);
-
-                                int width = metrics.widthPixels;
-                                int height = metrics.heightPixels;
-
                                 ImageView img= new ImageView(self);
 
                                 grid.addView(img);
